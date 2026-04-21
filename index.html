@@ -828,18 +828,35 @@
   .ctrl-btn.primary:hover { background: var(--red-dark); }
   .ctrl-btn.primary:active { box-shadow: 0 2px 0 var(--red-dark); }
   .now-playing {
-    padding: 1rem 1.2rem;
+    padding: 1.1rem 1.3rem;
     background: var(--card);
     border: 3px solid var(--border);
     border-radius: 14px;
-    font-size: 1.15rem;
+    font-size: 1.45rem;
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    min-height: 3.5rem;
+    gap: 0.9rem;
+    min-height: 4rem;
   }
-  .now-playing .np-label { color: var(--red); font-weight: 700; flex-shrink: 0; }
-  .now-playing .np-title { font-weight: 600; color: var(--ink); flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .now-playing .np-label {
+    color: #fff;
+    background: var(--red);
+    font-weight: 700;
+    flex-shrink: 0;
+    font-size: 1.1rem;
+    padding: 0.3rem 0.7rem;
+    border-radius: 8px;
+  }
+  .now-playing .np-title {
+    font-family: 'Noto Serif SC', serif;
+    font-weight: 700;
+    color: var(--ink);
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
   .np-heart {
     background: none;
     border: 2px solid var(--border);
