@@ -874,6 +874,12 @@ function init() {
   }, 10 * 60 * 1000);
   const h = location.hash.replace('#','');
   if (pages.includes(h)) show(h);
+  // Re-route on browser back/forward and manual hash edits
+  window.addEventListener('hashchange', () => {
+    const next = location.hash.replace('#','') || 'home';
+    const cur = pages.find(p => byId('page-' + p).classList.contains('active'));
+    if (next !== cur && pages.includes(next)) show(next);
+  });
 }
 
 if (document.readyState === 'loading') {
