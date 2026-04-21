@@ -1,0 +1,5 @@
+# gstack tooling: contains local server tokens, audit reports, screenshots
+.gstack/
+
+# macOS
+.DS_Store
