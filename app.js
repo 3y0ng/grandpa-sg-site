@@ -56,12 +56,22 @@ const zhDays = ['星期日','星期一','星期二','星期三','星期四','星
 function tzTime(tz) {
   return new Date().toLocaleTimeString('en-GB', { timeZone: tz, hour: '2-digit', minute: '2-digit', hour12: false });
 }
+function tzParts(tz) {
+  // Get y/m/d/weekday in target tz, regardless of system tz
+  const f = new Intl.DateTimeFormat('en-GB', { timeZone: tz, year: 'numeric', month: 'numeric', day: 'numeric', weekday: 'short' });
+  const parts = {};
+  f.formatToParts(new Date()).forEach(p => parts[p.type] = p.value);
+  return parts;
+}
 function tick() {
   const sg = byId('clock-sg'); if (sg) sg.textContent = tzTime('Asia/Singapore');
   const bne = byId('clock-bne'); if (bne) bne.textContent = tzTime('Australia/Brisbane');
-  const d = new Date();
   const de = byId('date');
-  if (de) de.textContent = `${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日 ${zhDays[d.getDay()]}`;
+  if (de) {
+    const p = tzParts('Asia/Singapore');
+    const dayIdx = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].indexOf(p.weekday);
+    de.textContent = `${p.year}年${parseInt(p.month)}月${parseInt(p.day)}日 ${zhDays[dayIdx]}`;
+  }
 }
 function setGreeting() {
   const h = parseInt(new Date().toLocaleString('en-US', { timeZone: 'Asia/Singapore', hour: 'numeric', hour12: false }));
