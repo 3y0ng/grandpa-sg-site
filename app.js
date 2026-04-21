@@ -828,6 +828,15 @@ document.addEventListener('submit', (e) => {
   if (form) { e.preventDefault(); customSearch(); }
 });
 
+// Enter / Space activates any focused [data-action] element (a11y for div-based "buttons")
+document.addEventListener('keydown', (e) => {
+  if (e.key !== 'Enter' && e.key !== ' ') return;
+  const el = e.target.closest('[data-action][tabindex]');
+  if (!el || el.tagName === 'BUTTON' || el.tagName === 'A' || el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') return;
+  e.preventDefault();
+  el.click();
+});
+
 // Keyboard shortcuts
 document.addEventListener('keydown', e => {
   const modalOpen = byId('modal').classList.contains('open');

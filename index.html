@@ -222,6 +222,7 @@
     border-color: var(--gold);
   }
   .tile:active { transform: translateY(-2px); }
+  .tile:focus-visible { outline: 4px solid var(--gold); outline-offset: 4px; }
   .tile-key {
     position: absolute;
     top: 1.2rem; left: 1.2rem;
@@ -1134,25 +1135,25 @@
       </div>
     </div>
     <div class="home-grid">
-      <div class="tile news" data-action="show" data-page="news">
+      <div class="tile news" data-action="show" data-page="news" role="button" tabindex="0" aria-label="新闻">
         <div class="tile-key">1</div>
         <div class="emoji">📰</div>
         <div class="label">新闻</div>
         <div class="sub">看看今天的新闻</div>
       </div>
-      <div class="tile tv" data-action="show" data-page="tv">
+      <div class="tile tv" data-action="show" data-page="tv" role="button" tabindex="0" aria-label="电视">
         <div class="tile-key">2</div>
         <div class="emoji">📺</div>
         <div class="label">电视</div>
         <div class="sub">老歌、电视剧、纪录片</div>
       </div>
-      <div class="tile games" data-action="show" data-page="games">
+      <div class="tile games" data-action="show" data-page="games" role="button" tabindex="0" aria-label="游戏">
         <div class="tile-key">3</div>
         <div class="emoji">🎮</div>
         <div class="label">游戏</div>
         <div class="sub">象棋、麻将、数独</div>
       </div>
-      <div class="tile weather" data-action="show" data-page="weather">
+      <div class="tile weather" data-action="show" data-page="weather" role="button" tabindex="0" aria-label="天气">
         <div class="tile-key">4</div>
         <div class="emoji">🌤️</div>
         <div class="label">天气</div>
@@ -1273,6 +1274,6 @@
   <div class="modal-body" id="modal-body"></div>
 </div>
 
-<script src="app.js?v=11"></script>
+<script src="app.js?v=12"></script>
 </body>
 </html>
