@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>爷爷的小天地</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&family=Noto+Serif+SC:wght@700;900&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/lunar-javascript@1.7.7/lunar.js"></script>
+<script src="https://www.youtube.com/iframe_api" async></script>
+<style>
+  :root {
+    --fs: 1;
+    --bg: #FDF7EC;
+    --bg-2: #F6ECD6;
+    --card: #FFFFFF;
+    --ink: #2B1810;
+    --ink-soft: #6B5B4F;
+    --ink-mute: #988572;
+    --red: #C8102E;
+    --red-dark: #9A0C23;
+    --gold: #B8860B;
+    --gold-soft: #E8C878;
+    --jade: #2F6E5A;
+    --blue: #1F4E79;
+    --border: #E8DCC4;
+  }
+  * { box-sizing: border-box; }
+  html {
+    font-size: calc(16px * var(--fs));
+    background:
+      radial-gradient(ellipse at top left, #FFF6E0 0%, transparent 50%),
+      radial-gradient(ellipse at bottom right, #F5E8C9 0%, transparent 50%),
+      var(--bg);
+    background-attachment: fixed;
+  }
+  body {
+    margin: 0; padding: 0;
+    font-family: 'Noto Sans SC', sans-serif;
+    color: var(--ink);
+    font-size: 1.375rem;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+  .title-font { font-family: 'Noto Serif SC', serif; }
+  .brush-font { font-family: 'Ma Shan Zheng', 'Noto Serif SC', serif; }
+
+  /* TOP BAR */
+  .topbar {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 2rem;
+    padding: 1.25rem 2.5rem;
+    border-bottom: 3px solid var(--border);
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(10px);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .greeting {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 2.2rem;
+    font-weight: 900;
+    color: var(--red);
+    letter-spacing: 2px;
+    cursor: pointer;
+  }
+  .center-strip {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    justify-self: center;
+  }
+  .clocks {
+    display: grid;
+    grid-template-columns: auto auto;
+    column-gap: 0.7rem;
+    row-gap: 2px;
+    align-items: baseline;
+  }
+  .clock-city {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--ink-soft);
+  }
+  .clock {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 1.7rem;
+    font-weight: 900;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 1.5px;
+    line-height: 1.1;
+  }
+  .clock.secondary { color: var(--ink-soft); font-size: 1.4rem; }
+  .weather {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--ink-soft);
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  .weather:hover { color: var(--red); }
+  .right-strip {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    justify-self: end;
+  }
+  .date-stack { text-align: right; }
+  .date {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--ink-soft);
+  }
+  .lunar {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 1.05rem;
+    color: var(--gold);
+    font-weight: 700;
+    margin-top: 2px;
+  }
+  .font-controls { display: flex; gap: 6px; }
+  .fc-btn {
+    background: #fff;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    padding: 8px 14px;
+    font-size: 1rem;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    color: var(--ink);
+    min-width: 48px;
+  }
+  .fc-btn:hover { border-color: var(--gold); background: var(--bg-2); }
+
+  /* PAGES */
+  .page { display: none; padding: 2.5rem 3rem 5rem; animation: fadeIn .25s ease; }
+  .page.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+  /* HOME */
+  .home-wrap { max-width: 1500px; margin: 0 auto; }
+  .hero {
+    position: relative;
+    height: 14rem;
+    border-radius: 24px;
+    overflow: hidden;
+    margin-bottom: 2rem;
+    border: 3px solid var(--border);
+    box-shadow: 0 12px 28px rgba(0,0,0,0.08);
+  }
+  .hero img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .hero-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(90deg,
+      rgba(253, 247, 236, 0.85) 0%,
+      rgba(253, 247, 236, 0.3) 50%,
+      rgba(253, 247, 236, 0) 100%);
+    display: flex;
+    align-items: center;
+    padding: 0 2rem;
+  }
+  .hero-caption {
+    font-family: 'Ma Shan Zheng', serif;
+    font-size: 2.6rem;
+    color: var(--red);
+    line-height: 1.2;
+  }
+  .hero-caption small {
+    display: block;
+    font-family: 'Noto Sans SC', sans-serif;
+    font-size: 1.1rem;
+    color: var(--ink-soft);
+    margin-top: 0.3rem;
+    font-weight: 500;
+  }
+  .home-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+  }
+  .tile {
+    background: var(--card);
+    border: 3px solid var(--border);
+    border-radius: 28px;
+    padding: 3rem 2rem 2.5rem;
+    min-height: 22rem;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .tile::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: var(--tile-gradient, transparent);
+    opacity: 0.08;
+    pointer-events: none;
+  }
+  .tile.news { --tile-gradient: linear-gradient(135deg, #1F4E79, #73A8D3); }
+  .tile.tv { --tile-gradient: linear-gradient(135deg, #C8102E, #F5A0A8); }
+  .tile.games { --tile-gradient: linear-gradient(135deg, #2F6E5A, #8BC6A5); }
+  .tile.weather { --tile-gradient: linear-gradient(135deg, #E8A547, #F5D28A); }
+  .tile.weather .label { color: #C87116; }
+  .tile:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 24px 48px rgba(0,0,0,0.12);
+    border-color: var(--gold);
+  }
+  .tile:active { transform: translateY(-2px); }
+  .tile-key {
+    position: absolute;
+    top: 1.2rem; left: 1.2rem;
+    background: var(--bg-2);
+    color: var(--ink-mute);
+    width: 2.2rem; height: 2.2rem;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700;
+    font-size: 1.1rem;
+  }
+  .tile .emoji { font-size: 7rem; line-height: 1; margin-bottom: 1rem; }
+  .tile .label {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 3.5rem;
+    font-weight: 900;
+    margin-bottom: 0.3rem;
+  }
+  .tile .sub { font-size: 1.3rem; color: var(--ink-soft); }
+  .tile.news .label { color: var(--blue); }
+  .tile.tv .label { color: var(--red); }
+  .tile.games .label { color: var(--jade); }
+
+  /* POEM CARD */
+  .poem-card {
+    margin-top: 2.5rem;
+    background: linear-gradient(135deg, #FFF9EB 0%, #FAEBC8 100%);
+    border: 3px solid var(--gold-soft);
+    border-radius: 28px;
+    padding: 2rem 2.5rem;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 1.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .poem-card::after {
+    content: '詩';
+    font-family: 'Ma Shan Zheng', serif;
+    position: absolute;
+    right: 2rem; top: -1rem;
+    font-size: 12rem;
+    color: rgba(184, 134, 11, 0.08);
+    pointer-events: none;
+  }
+  .poem-label {
+    font-family: 'Ma Shan Zheng', serif;
+    font-size: 2.4rem;
+    color: var(--red);
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    line-height: 1.1;
+  }
+  .poem-body {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.8;
+  }
+  .poem-origin {
+    font-size: 1.1rem;
+    color: var(--gold);
+    margin-top: 0.4rem;
+    font-weight: 600;
+  }
+  .poem-speak {
+    background: var(--gold);
+    color: #fff;
+    border: 0;
+    border-radius: 14px;
+    padding: 14px 22px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    white-space: nowrap;
+    box-shadow: 0 4px 0 #8A6608;
+  }
+  .poem-speak:active { transform: translateY(2px); box-shadow: 0 2px 0 #8A6608; }
+
+  /* SUB PAGE HEADER */
+  .sub-header {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    max-width: 1500px;
+    margin-left: auto;
+    margin-right: auto;
+    flex-wrap: wrap;
+  }
+  .back-btn {
+    background: var(--red);
+    color: #fff;
+    border: none;
+    border-radius: 14px;
+    padding: 0.9rem 1.8rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: 0 4px 0 var(--red-dark);
+    text-decoration: none;
+  }
+  .back-btn:hover { background: var(--red-dark); }
+  .back-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 var(--red-dark); }
+  .page-title {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 2.6rem;
+    font-weight: 900;
+    margin: 0;
+  }
+  .header-spacer { flex: 1; }
+
+  /* TABS */
+  .tabs {
+    display: flex;
+    gap: 0.6rem;
+    max-width: 1500px;
+    margin: 0 auto 2rem;
+    flex-wrap: wrap;
+  }
+  .tab {
+    background: #fff;
+    border: 3px solid var(--border);
+    border-radius: 14px;
+    padding: 0.7rem 1.4rem;
+    font-size: 1.3rem;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    color: var(--ink);
+    transition: all 0.15s;
+  }
+  .tab:hover { border-color: var(--gold); }
+  .tab.active { background: var(--blue); color: #fff; border-color: var(--blue); }
+  .tab.tv-tab.active { background: var(--red); border-color: var(--red); }
+
+  /* SEARCH BOX */
+  .searchbox {
+    display: flex;
+    gap: 0.5rem;
+    max-width: 600px;
+    margin-left: auto;
+  }
+  .searchbox input {
+    flex: 1;
+    border: 3px solid var(--border);
+    border-radius: 14px;
+    padding: 0.7rem 1rem;
+    font-size: 1.3rem;
+    font-family: inherit;
+    background: #fff;
+  }
+  .searchbox input:focus { outline: none; border-color: var(--red); }
+  .searchbox button {
+    background: var(--red);
+    color: #fff;
+    border: 0;
+    border-radius: 14px;
+    padding: 0.7rem 1.4rem;
+    font-size: 1.3rem;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+  }
+
+  /* NEWS CARDS */
+  .news-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    max-width: 1500px;
+    margin: 0 auto;
+  }
+  .news-card {
+    display: grid;
+    grid-template-columns: 17rem 1fr;
+    gap: 1.5rem;
+    background: var(--card);
+    border: 3px solid var(--border);
+    border-radius: 20px;
+    padding: 1.25rem;
+    transition: all 0.15s;
+    align-items: start;
+  }
+  .news-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 32px rgba(0,0,0,0.08);
+    border-color: var(--gold);
+  }
+  .news-thumb {
+    width: 100%;
+    aspect-ratio: 4/3;
+    border-radius: 14px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #FFE4B5, #FFD1A3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3.8rem;
+  }
+  .news-thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .news-body { min-width: 0; }
+  .news-title {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 1.7rem;
+    font-weight: 700;
+    margin: 0 0 0.6rem;
+    color: var(--ink);
+    line-height: 1.4;
+  }
+  .news-title a { color: inherit; text-decoration: none; }
+  .news-title a:hover { color: var(--red); }
+  .news-snippet {
+    font-size: 1.2rem;
+    color: var(--ink-soft);
+    margin: 0 0 0.75rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .news-meta {
+    font-size: 1.1rem;
+    color: var(--ink-soft);
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 0.8rem;
+  }
+  .news-source {
+    background: var(--blue);
+    color: #fff;
+    padding: 3px 10px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1rem;
+  }
+  .news-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+  .news-btn {
+    background: var(--bg-2);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 0.5rem 1rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    color: var(--ink);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    text-decoration: none;
+  }
+  .news-btn:hover { border-color: var(--gold); background: #FFF9EB; }
+  .news-btn.primary { background: var(--blue); color: #fff; border-color: var(--blue); }
+  .news-btn.primary:hover { background: #163956; }
+  .news-btn.speaking { background: var(--gold); color: #fff; border-color: var(--gold); animation: pulse 1.2s infinite; }
+  @keyframes pulse { 50% { opacity: 0.7; } }
+
+  /* LOADING SKELETON */
+  .loading, .empty-msg {
+    text-align: center;
+    padding: 4rem 1.5rem;
+    font-size: 1.6rem;
+    color: var(--ink-soft);
+    max-width: 1500px;
+    margin: 0 auto;
+  }
+  .skeleton-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    max-width: 1500px;
+    margin: 0 auto;
+  }
+  .skeleton-card {
+    display: grid;
+    grid-template-columns: 17rem 1fr;
+    gap: 1.5rem;
+    background: var(--card);
+    border: 3px solid var(--border);
+    border-radius: 20px;
+    padding: 1.25rem;
+  }
+  .skel {
+    background: linear-gradient(90deg, #F0E6CF 25%, #F9F1DA 37%, #F0E6CF 63%);
+    background-size: 400% 100%;
+    animation: shimmer 1.4s infinite;
+    border-radius: 10px;
+  }
+  @keyframes shimmer { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
+  .skel-thumb { aspect-ratio: 4/3; border-radius: 14px; }
+  .skel-line { height: 1rem; margin-bottom: 0.6rem; }
+  .skel-line.title { height: 1.6rem; width: 80%; }
+  .skel-line.short { width: 40%; }
+
+  /* TV / GAMES CARDS */
+  .tv-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    max-width: 1500px;
+    margin: 0 auto;
+  }
+  .tv-card {
+    background: var(--card);
+    border: 3px solid var(--border);
+    border-radius: 20px;
+    padding: 2.2rem 1.75rem;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: all 0.15s;
+    min-height: 15rem;
+    justify-content: center;
+  }
+  .tv-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 32px rgba(0,0,0,0.1);
+    border-color: var(--red);
+  }
+  .tv-card .s-emoji { font-size: 5.2rem; margin-bottom: 0.8rem; line-height: 1; }
+  .tv-card .s-label {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+  }
+  .tv-card .s-sub { font-size: 1.25rem; color: var(--ink-soft); }
+  .game-card:hover { border-color: var(--jade); }
+
+  /* SECTIONS on TV */
+  .section { max-width: 1500px; margin: 0 auto 2rem; }
+  .section-title {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin: 0 0 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .video-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+    gap: 1rem;
+  }
+  .video-thumb {
+    cursor: pointer;
+    background: var(--card);
+    border: 3px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.15s, border-color 0.15s;
+  }
+  .video-thumb:hover { transform: translateY(-3px); border-color: var(--red); }
+  .video-thumb img { width: 100%; aspect-ratio: 16/9; object-fit: cover; background: #ddd; }
+  .video-thumb .v-title {
+    padding: 0.7rem 0.8rem 0.8rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* WEATHER PAGE */
+  .weather-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    max-width: 1500px;
+    margin: 0 auto;
+  }
+  .weather-city {
+    background: var(--card);
+    border: 3px solid var(--border);
+    border-radius: 20px;
+    padding: 1.75rem 2rem;
+  }
+  .wx-header {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 1rem;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px dashed var(--border);
+  }
+  .wx-current-emoji { font-size: 4.5rem; line-height: 1; }
+  .wx-city-name {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--red);
+  }
+  .wx-current-desc { font-size: 1.3rem; color: var(--ink-soft); margin-top: 0.2rem; }
+  .wx-current-temp {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 4rem;
+    font-weight: 900;
+    color: var(--ink);
+    letter-spacing: -2px;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+  }
+  .wx-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem 1.5rem;
+    margin: 0 0 1.25rem;
+    padding: 1rem 1.25rem;
+    background: var(--bg-2);
+    border-radius: 12px;
+  }
+  .wx-stat {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.05rem;
+  }
+  .wx-stat-label { color: var(--ink-soft); }
+  .wx-stat-value { font-weight: 700; color: var(--ink); }
+  .wx-section-title {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 1.35rem;
+    font-weight: 700;
+    margin: 1.25rem 0 0.6rem;
+    color: var(--ink);
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .wx-hourly {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 0.5rem;
+  }
+  .wx-hourly-item {
+    background: var(--bg-2);
+    border-radius: 12px;
+    padding: 0.8rem 0.4rem;
+    text-align: center;
+  }
+  .wx-hourly-time { font-size: 0.9rem; color: var(--ink-soft); font-weight: 600; }
+  .wx-hourly-emoji { font-size: 1.5rem; margin: 0.3rem 0; line-height: 1; }
+  .wx-hourly-temp { font-weight: 700; font-size: 1.05rem; }
+  .wx-hourly-pop { font-size: 0.8rem; color: #1F4E79; font-weight: 600; }
+  .wx-daily { display: grid; gap: 0.4rem; }
+  .wx-daily-item {
+    display: grid;
+    grid-template-columns: 5rem 2.5rem 1fr 4rem 4rem;
+    align-items: center;
+    padding: 0.6rem 0.9rem;
+    background: var(--bg-2);
+    border-radius: 10px;
+    font-size: 1.05rem;
+    gap: 0.5rem;
+  }
+  .wx-daily-item.today { background: #FFF3D6; border: 2px solid var(--gold-soft); }
+  .wx-daily-day { font-weight: 700; color: var(--ink); }
+  .wx-daily-date { font-size: 0.85rem; color: var(--ink-soft); font-weight: 500; display: block; }
+  .wx-daily-emoji { font-size: 1.5rem; text-align: center; line-height: 1; }
+  .wx-daily-desc { color: var(--ink-soft); font-size: 1rem; }
+  .wx-daily-min { text-align: right; color: var(--ink-soft); font-size: 1rem; font-variant-numeric: tabular-nums; }
+  .wx-daily-max { text-align: right; font-weight: 700; color: var(--red); font-variant-numeric: tabular-nums; }
+
+  /* TV PAGE (embedded, channel-style) */
+  .tv-layout {
+    display: grid;
+    grid-template-columns: 1fr 22rem;
+    gap: 1.5rem;
+    max-width: 1500px;
+    margin: 0 auto 2rem;
+  }
+  .tv-main { display: flex; flex-direction: column; gap: 1rem; min-width: 0; }
+  /* Wood-bezel TV cabinet */
+  .tv-cabinet {
+    background:
+      repeating-linear-gradient(92deg, rgba(0,0,0,0.12) 0 1px, transparent 1px 7px),
+      linear-gradient(180deg, #5c3a1f 0%, #3e2512 52%, #5c3a1f 100%);
+    padding: 1.4rem 1.4rem 3.4rem;
+    border-radius: 18px;
+    position: relative;
+    box-shadow:
+      inset 0 2px 3px rgba(255, 220, 180, 0.18),
+      inset 0 -3px 6px rgba(0, 0, 0, 0.5),
+      0 0 0 2px #1e1208,
+      0 18px 48px rgba(0, 0, 0, 0.35);
+  }
+  .tv-screen {
+    aspect-ratio: 16/9;
+    background: #000;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    box-shadow:
+      inset 0 0 0 6px #1a120b,
+      inset 0 0 30px rgba(0, 0, 0, 0.85),
+      0 0 0 3px #2a1a0c;
+  }
+  .tv-screen iframe, .tv-screen > div#tv-player { width: 100%; height: 100%; border: 0; background: #000; }
+  .tv-screen .screen-off {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    color: #CBB98D;
+    font-family: 'Noto Serif SC', serif;
+    font-size: 1.6rem;
+    text-align: center;
+    background: radial-gradient(circle at center, #1a120b 0%, #000 100%);
+    padding: 2rem;
+    z-index: 2;
+  }
+  /* Channel badge overlay (like real TV's on-screen display) */
+  .channel-badge {
+    position: absolute;
+    top: 0.9rem; left: 0.9rem;
+    background: rgba(0, 0, 0, 0.55);
+    color: #FFF6E0;
+    padding: 0.35rem 0.8rem;
+    border-radius: 6px;
+    font-family: 'Noto Serif SC', serif;
+    font-weight: 900;
+    font-size: 1rem;
+    letter-spacing: 2px;
+    z-index: 4;
+    backdrop-filter: blur(4px);
+    pointer-events: none;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+    display: none;
+  }
+  .channel-badge.visible { display: block; animation: fadeOut 3s forwards; }
+  @keyframes fadeOut {
+    0%, 60% { opacity: 1; }
+    100% { opacity: 0.25; }
+  }
+  /* Bottom of cabinet — speaker grille + power LED */
+  .tv-dock {
+    position: absolute;
+    left: 1.4rem; right: 1.4rem; bottom: 0.8rem;
+    height: 1.8rem;
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .tv-grille {
+    flex: 1;
+    height: 100%;
+    background-image:
+      repeating-linear-gradient(90deg, #1a0f06 0 2px, rgba(0,0,0,0.3) 2px 4px);
+    border-radius: 3px;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.5);
+  }
+  .tv-led {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #ff6a6a, #b10c0c 70%);
+    box-shadow: 0 0 6px rgba(255, 80, 80, 0.9), inset 0 1px 1px rgba(255,255,255,0.5);
+  }
+  .tv-brand {
+    font-family: 'Noto Serif SC', serif;
+    font-weight: 900;
+    color: #caa87a;
+    font-size: 0.95rem;
+    letter-spacing: 3px;
+    text-shadow: 0 1px 0 rgba(0,0,0,0.8);
+  }
+  .tv-controls {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+  .ctrl-btn {
+    background: var(--ink);
+    color: #fff;
+    border: 0;
+    border-radius: 14px;
+    padding: 1rem 1.2rem;
+    font-size: 1.3rem;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    box-shadow: 0 4px 0 #140b06;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+  }
+  .ctrl-btn:hover { background: #3a2416; }
+  .ctrl-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 #140b06; }
+  .ctrl-btn.primary { background: var(--red); box-shadow: 0 4px 0 var(--red-dark); }
+  .ctrl-btn.primary:hover { background: var(--red-dark); }
+  .ctrl-btn.primary:active { box-shadow: 0 2px 0 var(--red-dark); }
+  .now-playing {
+    padding: 1rem 1.2rem;
+    background: var(--card);
+    border: 3px solid var(--border);
+    border-radius: 14px;
+    font-size: 1.15rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-height: 3.5rem;
+  }
+  .now-playing .np-label { color: var(--red); font-weight: 700; flex-shrink: 0; }
+  .now-playing .np-title { font-weight: 600; color: var(--ink); flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .np-heart {
+    background: none;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    padding: 6px 10px;
+    font-size: 1.3rem;
+    cursor: pointer;
+  }
+  .np-heart.active { background: #FFE4B5; border-color: var(--gold); }
+
+  .tv-sidebar {
+    background: var(--card);
+    border: 3px solid var(--border);
+    border-radius: 18px;
+    padding: 1rem 1rem 1.2rem;
+    align-self: start;
+    position: sticky;
+    top: 7rem;
+  }
+  .sidebar-title {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 1.3rem;
+    margin: 0 0 0.8rem;
+    padding: 0 0.3rem 0.6rem;
+    border-bottom: 2px dashed var(--border);
+    color: var(--red);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .channels { display: flex; flex-direction: column; gap: 0.4rem; }
+  .channel-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.7rem 0.9rem;
+    background: var(--bg);
+    border: 2px solid transparent;
+    border-radius: 12px;
+    cursor: pointer;
+    font-family: inherit;
+    text-align: left;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--ink);
+    transition: all 0.12s;
+    width: 100%;
+  }
+  .channel-btn:hover { border-color: var(--gold); background: #FFF9EB; }
+  .channel-btn.active {
+    background: var(--red);
+    color: #fff;
+    border-color: var(--red-dark);
+  }
+  .channel-btn.active .channel-num { background: #fff; color: var(--red); }
+  .channel-num {
+    background: #fff;
+    color: var(--red);
+    width: 2rem; height: 2rem;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 1.05rem;
+    font-family: monospace;
+    border: 2px solid var(--red);
+    flex-shrink: 0;
+  }
+  .channel-emoji { font-size: 1.4rem; line-height: 1; }
+  .channel-name { flex: 1; }
+  .channel-sep {
+    height: 2px;
+    background: var(--border);
+    margin: 0.5rem 0.3rem;
+    border-radius: 1px;
+  }
+  .channel-btn.quick { font-size: 1rem; padding: 0.55rem 0.75rem; }
+  .channel-btn.quick .channel-num { background: var(--gold); color: #fff; border-color: var(--gold); font-family: inherit; font-size: 0.95rem; }
+  .channel-btn.quick.active .channel-num { background: #fff; color: var(--gold); }
+
+  .video-thumb.playing { border-color: var(--red); box-shadow: 0 0 0 3px rgba(200,16,46,0.2); }
+  .video-thumb.playing .v-title { color: var(--red); font-weight: 700; }
+
+  /* MODAL */
+  .modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(20, 12, 8, 0.94);
+    z-index: 100;
+    padding: 1.5rem;
+    overflow-y: auto;
+  }
+  .modal.open { display: flex; flex-direction: column; }
+  .modal-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.2rem;
+    max-width: 1600px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .modal-title {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 2rem;
+    font-weight: 900;
+    color: #FFF6E0;
+    margin: 0;
+  }
+  .modal-actions { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+  .close-btn, .fav-btn {
+    color: #fff;
+    border: none;
+    border-radius: 14px;
+    padding: 0.7rem 1.4rem;
+    font-size: 1.3rem;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+  }
+  .close-btn { background: var(--red); box-shadow: 0 4px 0 var(--red-dark); }
+  .close-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 var(--red-dark); }
+  .fav-btn { background: #4a3d2f; box-shadow: 0 4px 0 #2a1f14; }
+  .fav-btn.active { background: var(--gold); box-shadow: 0 4px 0 #8A6608; }
+  .fav-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 #8A6608; }
+  .modal-body {
+    display: grid;
+    grid-template-columns: 2.4fr 1fr;
+    gap: 1.5rem;
+    max-width: 1600px;
+    width: 100%;
+    margin: 0 auto;
+    flex: 1;
+    min-height: 0;
+  }
+  .player-wrap {
+    aspect-ratio: 16/9;
+    background: #000;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .player-wrap iframe { width: 100%; height: 100%; border: 0; }
+  .playlist {
+    background: rgba(255,255,255,0.06);
+    border-radius: 16px;
+    padding: 1rem;
+    max-height: 72vh;
+    overflow-y: auto;
+  }
+  .playlist-item {
+    display: grid;
+    grid-template-columns: 7rem 1fr;
+    gap: 0.8rem;
+    padding: 0.7rem;
+    border-radius: 12px;
+    cursor: pointer;
+    margin-bottom: 0.4rem;
+    transition: background 0.15s;
+    color: #fff;
+  }
+  .playlist-item:hover { background: rgba(255,255,255,0.1); }
+  .playlist-item.playing { background: var(--red); }
+  .playlist-item img {
+    width: 100%;
+    aspect-ratio: 16/9;
+    object-fit: cover;
+    border-radius: 8px;
+    background: #333;
+  }
+  .playlist-item .p-title {
+    font-size: 1.05rem;
+    font-weight: 600;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .playlist-item .p-uploader {
+    font-size: 0.9rem;
+    color: #ccc;
+    margin-top: 0.2rem;
+  }
+  .game-frame {
+    width: 100%;
+    height: 78vh;
+    border: 0;
+    border-radius: 16px;
+    background: #fff;
+  }
+  .modal-body.single { grid-template-columns: 1fr; }
+
+  .spinner {
+    display: inline-block;
+    width: 3rem; height: 3rem;
+    border: 6px solid var(--border);
+    border-top-color: var(--red);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  footer {
+    text-align: center;
+    padding: 2.5rem;
+    color: var(--ink-soft);
+    font-size: 1.2rem;
+  }
+
+  .kbd-hint {
+    max-width: 1500px;
+    margin: 1.5rem auto 0;
+    text-align: center;
+    font-size: 1rem;
+    color: var(--ink-mute);
+  }
+  .kbd {
+    display: inline-block;
+    padding: 2px 9px;
+    background: #fff;
+    border: 2px solid var(--border);
+    border-bottom-width: 3px;
+    border-radius: 6px;
+    font-family: monospace;
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin: 0 3px;
+  }
+
+  @media (max-width: 1100px) {
+    .home-grid { grid-template-columns: 1fr; }
+    .tv-grid { grid-template-columns: 1fr 1fr; }
+    .news-list, .skeleton-grid { grid-template-columns: 1fr; }
+    .news-card, .skeleton-card { grid-template-columns: 1fr; }
+    .news-thumb, .skel-thumb { max-width: 100%; }
+    .modal-body { grid-template-columns: 1fr; }
+    .playlist { max-height: 40vh; }
+    .topbar { grid-template-columns: 1fr; gap: 0.6rem; text-align: center; }
+    .center-strip, .right-strip { justify-self: center; }
+    .poem-card { grid-template-columns: 1fr; text-align: center; }
+    .poem-label { writing-mode: horizontal-tb; }
+    .tv-layout { grid-template-columns: 1fr; }
+    .tv-sidebar { position: static; }
+    .page { padding: 1.5rem 1rem 3rem; }
+    .home-grid { grid-template-columns: 1fr 1fr; }
+    .weather-grid { grid-template-columns: 1fr; }
+    .wx-daily-item { grid-template-columns: 4rem 2rem 1fr 3.5rem 3.5rem; }
+    .wx-hourly { grid-template-columns: repeat(4, 1fr); }
+  }
+  @media (max-width: 600px) {
+    .home-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="greeting" id="greeting" data-action="show" data-page="home">爷爷，您好！</div>
+  <div class="center-strip">
+    <div class="clocks">
+      <div class="clock-city">新加坡</div>
+      <div class="clock" id="clock-sg">--:--</div>
+      <div class="clock-city">布里斯班</div>
+      <div class="clock secondary" id="clock-bne">--:--</div>
+    </div>
+    <div class="weather" id="weather" data-action="show" data-page="weather" title="点开看详细天气">· · ·</div>
+  </div>
+  <div class="right-strip">
+    <div class="date-stack">
+      <div class="date" id="date"></div>
+      <div class="lunar" id="lunar"></div>
+    </div>
+    <div class="font-controls">
+      <button class="fc-btn" data-action="change-font" data-delta="-0.1" title="小一点">小 −</button>
+      <button class="fc-btn" data-action="change-font" data-delta="0.1" title="大一点">大 ＋</button>
+    </div>
+  </div>
+</div>
+
+<!-- HOME -->
+<div class="page active" id="page-home">
+  <div class="home-wrap">
+    <div class="hero">
+      <img src="https://images.pexels.com/photos/33847224/pexels-photo-33847224.jpeg?auto=compress&cs=tinysrgb&w=1600" alt="新加坡滨海湾">
+      <div class="hero-overlay">
+        <div class="hero-caption">新加坡 · 滨海湾<small>爷爷的家</small></div>
+      </div>
+    </div>
+    <div class="home-grid">
+      <div class="tile news" data-action="show" data-page="news">
+        <div class="tile-key">1</div>
+        <div class="emoji">📰</div>
+        <div class="label">新闻</div>
+        <div class="sub">看看今天的新闻</div>
+      </div>
+      <div class="tile tv" data-action="show" data-page="tv">
+        <div class="tile-key">2</div>
+        <div class="emoji">📺</div>
+        <div class="label">电视</div>
+        <div class="sub">老歌、电视剧、纪录片</div>
+      </div>
+      <div class="tile games" data-action="show" data-page="games">
+        <div class="tile-key">3</div>
+        <div class="emoji">🎮</div>
+        <div class="label">游戏</div>
+        <div class="sub">象棋、麻将、数独</div>
+      </div>
+      <div class="tile weather" data-action="show" data-page="weather">
+        <div class="tile-key">4</div>
+        <div class="emoji">🌤️</div>
+        <div class="label">天气</div>
+        <div class="sub">新加坡 · 布里斯班</div>
+      </div>
+    </div>
+
+    <div class="poem-card">
+      <div class="poem-label">今日<br>诗词</div>
+      <div>
+        <div class="poem-body" id="poem-content">…</div>
+        <div class="poem-origin" id="poem-origin"></div>
+      </div>
+      <button class="poem-speak" data-action="speak-poem">🔊 念给我听</button>
+    </div>
+
+    <div class="kbd-hint">
+      小提示：按键盘 <span class="kbd">1</span> <span class="kbd">2</span> <span class="kbd">3</span> <span class="kbd">4</span> 可以快速打开，按 <span class="kbd">Esc</span> 回主页
+    </div>
+  </div>
+</div>
+
+<!-- NEWS -->
+<div class="page" id="page-news">
+  <div class="sub-header">
+    <button class="back-btn" data-action="show" data-page="home">← 回主页</button>
+    <h1 class="page-title">📰 新闻</h1>
+    <div class="header-spacer"></div>
+    <button class="news-btn" data-action="refresh-news">🔄 刷新</button>
+  </div>
+  <div class="tabs" id="news-tabs"></div>
+  <div id="news-content"></div>
+</div>
+
+<!-- TV -->
+<div class="page" id="page-tv">
+  <div class="sub-header">
+    <button class="back-btn" data-action="show" data-page="home">← 回主页</button>
+    <h1 class="page-title">📺 电视</h1>
+    <div class="header-spacer"></div>
+    <form class="searchbox" data-action="custom-search-form">
+      <input type="text" id="tv-search" placeholder="搜索视频…">
+      <button type="submit">🔍 搜索</button>
+    </form>
+  </div>
+
+  <div class="tv-layout">
+    <div class="tv-main">
+      <div class="tv-cabinet">
+        <div class="tv-screen">
+          <div class="channel-badge" id="channel-badge">CH 01</div>
+          <div id="tv-player"></div>
+          <div class="screen-off" id="screen-off">
+            📺<br>请从右边选一个频道
+          </div>
+        </div>
+        <div class="tv-dock">
+          <span class="tv-brand">彩色电视机</span>
+          <div class="tv-grille"></div>
+          <div class="tv-led" title="开机"></div>
+        </div>
+      </div>
+      <div class="tv-controls">
+        <button class="ctrl-btn" data-action="prev-video">⏮ 上一个</button>
+        <button class="ctrl-btn primary" data-action="next-video">下一个 ⏭</button>
+      </div>
+      <div class="now-playing" id="now-playing">
+        <span class="np-label">待播放</span>
+        <span class="np-title">选择一个频道开始观看</span>
+      </div>
+    </div>
+
+    <aside class="tv-sidebar">
+      <h3 class="sidebar-title">📻 频道</h3>
+      <div class="channels" id="channels"></div>
+    </aside>
+  </div>
+
+  <div class="section">
+    <h3 class="section-title" id="list-title">🎬 本频道节目</h3>
+    <div class="video-row" id="channel-videos">
+      <div class="empty-msg" style="padding:1rem;font-size:1.1rem;grid-column:1/-1">👈 选择左边的频道开始观看</div>
+    </div>
+  </div>
+</div>
+
+<!-- WEATHER -->
+<div class="page" id="page-weather">
+  <div class="sub-header">
+    <button class="back-btn" data-action="show" data-page="home">← 回主页</button>
+    <h1 class="page-title">🌤️ 天气</h1>
+    <div class="header-spacer"></div>
+    <button class="news-btn" data-action="refresh-weather-page">🔄 刷新</button>
+  </div>
+  <div class="weather-grid">
+    <div class="weather-city" id="wx-sg"><div class="loading"><div class="spinner"></div>加载中…</div></div>
+    <div class="weather-city" id="wx-bne"><div class="loading"><div class="spinner"></div>加载中…</div></div>
+  </div>
+</div>
+
+<!-- GAMES -->
+<div class="page" id="page-games">
+  <div class="sub-header">
+    <button class="back-btn" data-action="show" data-page="home">← 回主页</button>
+    <h1 class="page-title">🎮 游戏</h1>
+  </div>
+  <div class="tv-grid" id="games-grid"></div>
+</div>
+
+<!-- MODAL -->
+<div class="modal" id="modal">
+  <div class="modal-head">
+    <h2 class="modal-title" id="modal-title">播放中</h2>
+    <div class="modal-actions" id="modal-actions">
+      <button class="close-btn" data-action="close-modal">✕ 关闭</button>
+    </div>
+  </div>
+  <div class="modal-body" id="modal-body"></div>
+</div>
+
+<script src="app.js?v=11"></script>
+</body>
+</html>
