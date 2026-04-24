@@ -86,7 +86,3 @@ Grandpa's not going to use these but they're here for sanity during dev:
 ## Built with
 
 Claude Code + [gstack](https://github.com/gstack-cli/gstack) (`/qa`, `/design-review`, `/cso`). The commit history shows every bug fix, design tweak, and security finding as its own atomic commit.
-
----
-
-Made for 爷爷 ❤️
