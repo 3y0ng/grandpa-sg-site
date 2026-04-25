@@ -135,7 +135,7 @@ function showWx(d) {
     const t = Math.round(d.current.temperature_2m);
     const code = d.current.weather_code;
     const [emoji, desc] = WMO[code] || ['🌡️', ''];
-    byId('weather').textContent = `${emoji} ${t}° ${desc} · 新加坡`;
+    byId('weather').textContent = `${emoji} ${t}° ${desc}`;
   } catch (e) { byId('weather').textContent = ''; }
 }
 
