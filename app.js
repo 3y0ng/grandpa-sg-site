@@ -1,9 +1,8 @@
 // ============ STATE ============
-const pages = ['home', 'news', 'tv', 'games', 'weather'];
+const pages = ['home', 'news', 'tv', 'weather'];
 let fs = parseFloat(localStorage.getItem('fs') || '1');
 let newsLoaded = false;
 let tvLoaded = false;
-let gamesLoaded = false;
 let currentNewsCat = 'sg';
 let currentPoem = null;
 let currentSpeakingBtn = null;
@@ -47,7 +46,6 @@ function show(id) {
     if (!tvLoaded) loadTvGrid();
     onShowTv();
   }
-  if (id === 'games' && !gamesLoaded) loadGamesGrid();
   if (id === 'weather') loadWeatherPage();
 }
 
@@ -733,40 +731,6 @@ function pushRecent(id, title, thumb) {
   localStorage.setItem('recents', JSON.stringify(list));
 }
 
-// ============ GAMES ============
-// These sites mostly allow iframe embedding. For ones that refuse (X-Frame-Options), user has "新窗口打开" button.
-const GAMES = [
-  { emoji: '♟️', label: '中国象棋', sub: '和电脑下棋', url: 'https://www.playok.com/en/xiangqi/' },
-  { emoji: '🀄', label: '麻将',     sub: '打麻将',       url: 'https://www.playok.com/en/mahjong/' },
-  { emoji: '🔢', label: '数独',     sub: '动动脑筋',     url: 'https://sudoku.com/zh/' },
-  { emoji: '🃏', label: '纸牌接龙', sub: '单人纸牌',     url: 'https://www.solitaired.com/klondike' },
-  { emoji: '⚫', label: '五子棋',   sub: '五子连珠',     url: 'https://www.playok.com/en/gomoku/' },
-  { emoji: '🧩', label: '麻将连连看', sub: '消除配对',   url: 'https://www.mahjong-game.com/' },
-];
-function loadGamesGrid() {
-  gamesLoaded = true;
-  byId('games-grid').innerHTML = GAMES.map((g, i) => `
-    <div class="tv-card game-card" data-action="open-game" data-index="${i}">
-      <div class="s-emoji">${g.emoji}</div>
-      <div class="s-label">${g.label}</div>
-      <div class="s-sub">${g.sub}</div>
-    </div>`).join('');
-}
-function openGame(i) {
-  const g = GAMES[i];
-  openModal(`🎮 ${g.label}`, '', true, false);
-  byId('modal-actions').innerHTML = `
-    <a class="fav-btn" href="${g.url}" target="_blank" rel="noopener" style="text-decoration:none;background:var(--jade);box-shadow:0 4px 0 #1d4d3e">⧉ 新窗口打开</a>
-    <button class="close-btn" data-action="close-modal">✕ 关闭</button>
-  `;
-  byId('modal-body').innerHTML = `
-    <div class="game-iframe-wrap" style="position:relative">
-      <iframe class="game-frame" src="${g.url}" allow="fullscreen"></iframe>
-      <div class="iframe-hint" style="margin-top:12px;color:#FFF6E0;font-size:1rem;text-align:center">
-        如果下面是空白的，点上面的 <b>⧉ 新窗口打开</b> 按钮
-      </div>
-    </div>`;
-}
 
 // ============ MODAL ============
 function openModal(title, bodyHtml, single, resetActions=true) {
@@ -809,7 +773,6 @@ document.addEventListener('click', (e) => {
   else if (action === 'prev-video') { prevVideo(); }
   else if (action === 'next-video') { nextVideo(); }
   else if (action === 'toggle-fav-now') { toggleFavNow(el.dataset.id); }
-  else if (action === 'open-game') { openGame(parseInt(el.dataset.index)); }
   else if (action === 'close-modal') { closeModal(); }
   else if (action === 'refresh-weather-page') { loadWeatherPage(true); }
 });
@@ -853,7 +816,7 @@ document.addEventListener('keydown', e => {
   if (homeActive) {
     if (e.key === '1') show('news');
     if (e.key === '2') show('tv');
-    if (e.key === '3') show('games');
+    if (e.key === '3') document.querySelector('.tile.videocall')?.click();
     if (e.key === '4') show('weather');
   } else if (tvActiveNow) {
     if (/^[1-9]$/.test(e.key)) { e.preventDefault(); selectChannel(parseInt(e.key) - 1); }
