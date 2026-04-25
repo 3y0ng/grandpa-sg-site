@@ -179,9 +179,10 @@
   }
   .tile.news { --tile-gradient: linear-gradient(135deg, #1F4E79, #73A8D3); }
   .tile.tv { --tile-gradient: linear-gradient(135deg, #C8102E, #F5A0A8); }
-  .tile.games { --tile-gradient: linear-gradient(135deg, #2F6E5A, #8BC6A5); }
+  .tile.videocall { --tile-gradient: linear-gradient(135deg, #6B4E8C, #B098D1); }
   .tile.weather { --tile-gradient: linear-gradient(135deg, #E8A547, #F5D28A); }
   .tile.weather .label { color: #C87116; }
+  a.tile { text-decoration: none; color: inherit; }
   .tile:hover {
     transform: translateY(-8px);
     box-shadow: 0 24px 48px rgba(0,0,0,0.12);
@@ -200,7 +201,7 @@
     font-weight: 700;
     font-size: 1.1rem;
   }
-  .tile .emoji { font-size: 7rem; line-height: 1; margin-bottom: 1rem; }
+  .tile .emoji { font-size: 5.5rem; line-height: 1; margin-bottom: 1rem; }
   .tile .label {
     font-family: 'Noto Serif SC', serif;
     font-size: 3.5rem;
@@ -210,7 +211,7 @@
   .tile .sub { font-size: 1.3rem; color: var(--ink-soft); }
   .tile.news .label { color: var(--blue); }
   .tile.tv .label { color: var(--red); }
-  .tile.games .label { color: var(--jade); }
+  .tile.videocall .label { color: #6B4E8C; }
 
   /* POEM CARD */
   .poem-card {
@@ -333,17 +334,10 @@
   .tab.tv-tab.active { background: var(--red); border-color: var(--red); }
 
   /* QUICK NEWS SITE LINKS */
-  .news-sites { margin-top: 2rem; }
-  .ns-label {
-    font-family: 'Noto Serif SC', serif;
-    font-size: 1.4rem;
-    font-weight: 700;
-    color: var(--ink-soft);
-    margin-bottom: 0.8rem;
-  }
+  .news-sites { margin-bottom: 1.5rem; }
   .ns-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 1rem;
   }
   .ns-link {
@@ -573,7 +567,6 @@
     margin-bottom: 0.3rem;
   }
   .tv-card .s-sub { font-size: 1.25rem; color: var(--ink-soft); }
-  .game-card:hover { border-color: var(--jade); }
 
   /* SECTIONS on TV */
   .section { max-width: 1500px; margin: 0 auto 2rem; }
@@ -1056,13 +1049,6 @@
     color: #ccc;
     margin-top: 0.2rem;
   }
-  .game-frame {
-    width: 100%;
-    height: 78vh;
-    border: 0;
-    border-radius: 16px;
-    background: #fff;
-  }
   .modal-body.single { grid-template-columns: 1fr; }
 
   .spinner {
@@ -1156,35 +1142,7 @@
 <!-- HOME -->
 <div class="page active" id="page-home">
   <div class="home-wrap">
-    <div class="home-grid">
-      <div class="tile news" data-action="show" data-page="news" role="button" tabindex="0" aria-label="新闻">
-        <div class="tile-key">1</div>
-        <div class="emoji">📰</div>
-        <div class="label">新闻</div>
-        <div class="sub">看看今天的新闻</div>
-      </div>
-      <div class="tile tv" data-action="show" data-page="tv" role="button" tabindex="0" aria-label="电视">
-        <div class="tile-key">2</div>
-        <div class="emoji">📺</div>
-        <div class="label">电视</div>
-        <div class="sub">老歌、电视剧、纪录片</div>
-      </div>
-      <div class="tile games" data-action="show" data-page="games" role="button" tabindex="0" aria-label="游戏">
-        <div class="tile-key">3</div>
-        <div class="emoji">🎮</div>
-        <div class="label">游戏</div>
-        <div class="sub">象棋、麻将、数独</div>
-      </div>
-      <div class="tile weather" data-action="show" data-page="weather" role="button" tabindex="0" aria-label="天气">
-        <div class="tile-key">4</div>
-        <div class="emoji">🌤️</div>
-        <div class="label">天气</div>
-        <div class="sub">新加坡 · 布里斯班</div>
-      </div>
-    </div>
-
     <div class="news-sites">
-      <div class="ns-label">直达网站</div>
       <div class="ns-grid">
         <a class="ns-link" href="https://www.zaobao.com.sg/" target="_blank" rel="noopener">
           <img class="ns-logo" src="https://www.google.com/s2/favicons?domain=zaobao.com.sg&sz=128" alt="" loading="lazy">
@@ -1198,6 +1156,36 @@
           <img class="ns-logo" src="https://www.google.com/s2/favicons?domain=shinmin.sg&sz=128" alt="" loading="lazy">
           <span class="ns-name">新明日报</span>
         </a>
+        <a class="ns-link" href="https://www.singaporepools.com.sg/en/product/Pages/toto_results.aspx" target="_blank" rel="noopener">
+          <img class="ns-logo" src="https://www.google.com/s2/favicons?domain=singaporepools.com.sg&sz=128" alt="" loading="lazy">
+          <span class="ns-name">彩票</span>
+        </a>
+      </div>
+    </div>
+    <div class="home-grid">
+      <div class="tile news" data-action="show" data-page="news" role="button" tabindex="0" aria-label="新闻">
+        <div class="tile-key">1</div>
+        <div class="emoji">📰</div>
+        <div class="label">新闻</div>
+        <div class="sub">看看今天的新闻</div>
+      </div>
+      <div class="tile tv" data-action="show" data-page="tv" role="button" tabindex="0" aria-label="电视">
+        <div class="tile-key">2</div>
+        <div class="emoji">📺</div>
+        <div class="label">电视</div>
+        <div class="sub">老歌、电视剧、纪录片</div>
+      </div>
+      <a class="tile videocall" href="https://uqz.zoom.us/j/82082971649" target="_blank" rel="noopener" aria-label="视频通话">
+        <div class="tile-key">3</div>
+        <div class="emoji">📹</div>
+        <div class="label">视频通话</div>
+        <div class="sub">和家人聊天</div>
+      </a>
+      <div class="tile weather" data-action="show" data-page="weather" role="button" tabindex="0" aria-label="天气">
+        <div class="tile-key">4</div>
+        <div class="emoji">🌤️</div>
+        <div class="label">天气</div>
+        <div class="sub">新加坡 · 布里斯班</div>
       </div>
     </div>
 
@@ -1292,15 +1280,6 @@
     <div class="weather-city" id="wx-sg"><div class="loading"><div class="spinner"></div>加载中…</div></div>
     <div class="weather-city" id="wx-bne"><div class="loading"><div class="spinner"></div>加载中…</div></div>
   </div>
-</div>
-
-<!-- GAMES -->
-<div class="page" id="page-games">
-  <div class="sub-header">
-    <button class="back-btn" data-action="show" data-page="home">← 回主页</button>
-    <h1 class="page-title">🎮 游戏</h1>
-  </div>
-  <div class="tv-grid" id="games-grid"></div>
 </div>
 
 <!-- MODAL -->
